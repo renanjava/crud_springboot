@@ -2,6 +2,7 @@ package br.edu.unicesumar.crud.controller;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.edu.unicesumar.crud.model.ModelPessoa;
+import br.edu.unicesumar.crud.model.domain.ModelPessoa;
 import br.edu.unicesumar.crud.repository.PessoaRepository;
 
 @RestController
@@ -25,45 +26,34 @@ public class PessoaController {
 	@Autowired
 	private PessoaRepository pessoaRepository;
 	
-	@GetMapping("todos")
+	@GetMapping("/buscarTodos")
 	public List<ModelPessoa> all(){
 		return pessoaRepository.findAll();
 	}
 	
-	private List<ModelPessoa> mock(){
-		
-		return Arrays.asList(
-				new ModelPessoa(1L, "Renan1", "Teste1"),
-				new ModelPessoa(2L, "Renan2", "Teste2"),
-				new ModelPessoa(3L, "Renan3", "Teste3")
-				);
+	@GetMapping("/buscarPorId/{id}")
+	public Optional<ModelPessoa> findById(@PathVariable Long id) {
+		return pessoaRepository.findById(id);
 	}
 	
-	@GetMapping("/findById{id}")
-	public ModelPessoa byId(@PathVariable Long id) {
-		return mock().stream().filter
-				(pessoa -> pessoa.getId().equals(id)).findFirst().orElse(null);
-	}
-	
-	@GetMapping("/buscar")
-	public List<ModelPessoa> searchBy(@RequestParam("valor") String search){
-		return mock().stream().filter(pessoa -> pessoa.getNome().toLowerCase().contains(search.toLowerCase())).collect(Collectors.toList());
+	@GetMapping("/buscarPorParametro")
+	public List<ModelPessoa> searchBy(@RequestParam("nome") Iterable<Long> search){
+		return pessoaRepository.findAllById(search);
 	}
 	
 	@PostMapping("/criar")
-	public ModelPessoa create(@RequestBody ModelPessoa novaPessoa) {
-		Long idMax = mock().stream().mapToLong(ModelPessoa::getId).max().orElse(0L);
-		
-		return new ModelPessoa(idMax+1L, novaPessoa.getNome(), novaPessoa.getDocumento());
+	public void create(@RequestBody ModelPessoa novaPessoa) {		
+		pessoaRepository.save(novaPessoa);
 	}
 	
-	@PutMapping("/update{id}")
+	@PutMapping("/atualizarPorId/{id}")
 	public void update(@PathVariable Long id, @RequestBody ModelPessoa editPessoa) {
-		ModelPessoa renan = new ModelPessoa(id, editPessoa.getNome(), editPessoa.getDocumento());
+		editPessoa.setId(id);			
+		pessoaRepository.save(editPessoa);
 	}
 	
-	@DeleteMapping("/deletar{id}")
+	@DeleteMapping("/deletarPorId/{id}")
 	public void delete(@PathVariable Long id) {
-		long l = id.longValue();
+		pessoaRepository.deleteById(id);
 	}
 }
