@@ -16,8 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.edu.unicesumar.crud.exceptions.PessoaNaoEncontradaException;
 import br.edu.unicesumar.crud.model.domain.ModelPessoa;
-import br.edu.unicesumar.crud.repository.PessoaRepository;
+import br.edu.unicesumar.crud.model.repository.PessoaRepository;
 
 @RestController
 @RequestMapping("/pessoa")
@@ -32,8 +33,8 @@ public class PessoaController {
 	}
 	
 	@GetMapping("/buscarPorId/{id}")
-	public Optional<ModelPessoa> findById(@PathVariable Long id) {
-		return pessoaRepository.findById(id);
+	public ModelPessoa findById(@PathVariable Long id) throws PessoaNaoEncontradaException{
+		return pessoaRepository.findById(id).orElseThrow(PessoaNaoEncontradaException::new);
 	}
 	
 	@GetMapping("/buscarPorParametro")
@@ -42,8 +43,8 @@ public class PessoaController {
 	}
 	
 	@PostMapping("/criar")
-	public void create(@RequestBody ModelPessoa novaPessoa) {		
-		pessoaRepository.save(novaPessoa);
+	public ModelPessoa create(@RequestBody ModelPessoa novaPessoa) {		
+		return pessoaRepository.save(novaPessoa);
 	}
 	
 	@PutMapping("/atualizarPorId/{id}")
