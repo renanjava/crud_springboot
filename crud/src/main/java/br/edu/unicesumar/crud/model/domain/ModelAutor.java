@@ -1,34 +1,30 @@
 package br.edu.unicesumar.crud.model.domain;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.Data;
 
 @Entity
-@Table(name = "ES_PESSOA")
-@Data
-public class ModelPessoa {
+@Table
+public class ModelAutor {
 	
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
 	private String nome;
 	
-	@Column(name = "doc", length = 14)
-	private String documento;
+	private Integer idade;
 	
-	public ModelPessoa(Long id, String nome, String documento) {
-		this.id = id;
-		this.nome = nome;
-		this.documento = documento;
+	public ModelAutor() {
+		
 	}
 	
-	public ModelPessoa() {
-		
+	public ModelAutor(Long id, String nome, Integer idade) {
+		this.id = id;
+		this.nome = nome;
+		this.idade = idade;
 	}
 
 	public Long getId() {
@@ -47,13 +43,12 @@ public class ModelPessoa {
 		this.nome = nome;
 	}
 
-	public String getDocumento() {
-		return documento;
+	public Integer getIdade() {
+		return idade;
 	}
 
-	public void setDocumento(String documento) {
-		this.documento = documento;
+	public void setIdade(Integer idade) {
+		this.idade = idade;
 	}
-	
 	
 }

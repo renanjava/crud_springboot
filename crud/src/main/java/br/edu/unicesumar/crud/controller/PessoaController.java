@@ -1,9 +1,6 @@
 package br.edu.unicesumar.crud.controller;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -57,4 +54,15 @@ public class PessoaController {
 	public void delete(@PathVariable Long id) {
 		pessoaRepository.deleteById(id);
 	}
+	/*
+	@GetMapping("/buscarDocumentoHQL")
+	public void buscarDocumentoHql(@RequestParam("documento") String documento) {
+		pessoaRepository.buscarPessoaPorDocumentoHql(documento);
+	}
+	
+	@GetMapping("/buscarDocumentoNativa")
+	public void buscarDocumentoNativa(@RequestParam("documento") String documento) {
+		pessoaRepository.buscarPessoaPorDocumentoNativa(documento);
+	}
+	*/
 }
